@@ -1,25 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { MetalType, DesignState } from '../types';
 import Viewer3D from './Viewer3D';
-import { ShoppingBag, RotateCcw, Type as TypeIcon, Globe, ArrowLeft, Download } from 'lucide-react';
+import { ShoppingBag, RotateCcw, Globe, ArrowLeft, Download } from 'lucide-react';
 import { Currency, Language } from '../App';
 
-const FONTS = [
-  // MONOSPACED (Recommended for best illusion alignment)
-  { name: 'Inconsolata (Recommended)', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/droid/droid_sans_mono_regular.typeface.json', category: 'Monospaced' },
-  { name: 'Roboto Mono', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/helvetiker_regular.typeface.json', category: 'Monospaced' },
-  { name: 'Space Mono', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/optimer_bold.typeface.json', category: 'Monospaced' },
-  { name: 'Ubuntu Mono', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/gentilis_bold.typeface.json', category: 'Monospaced' },
-  { name: 'Courier Prime', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/droid/droid_serif_bold.typeface.json', category: 'Monospaced' },
-
-  // GEOMETRIC & ROUNDED
-  { name: 'Mont (Geometric)', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/helvetiker_bold.typeface.json', category: 'Geometric' },
-  { name: 'Mont Bold Italic (Geometric)', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/helvetiker_bold.typeface.json#italic', category: 'Geometric' },
-  { name: 'Geogrotesque (Rounded)', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/optimer_bold.typeface.json', category: 'Rounded' },
-  { name: 'GT Pressura', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/gentilis_regular.typeface.json', category: 'Modern' },
-  { name: 'ITC Avant Garde Gothic', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/helvetiker_regular.typeface.json', category: 'Geometric' },
-  { name: 'Varela Round', url: 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/droid/droid_sans_regular.typeface.json', category: 'Rounded' },
-];
+const MONT_FONT_URL = 'https://cdn.jsdelivr.net/npm/three@0.162.0/examples/fonts/helvetiker_bold.typeface.json';
 
 interface DesignStudioProps {
   currency: Currency;
@@ -40,7 +25,7 @@ const DesignStudio: React.FC<DesignStudioProps> = ({
     letter1: 'G',
     letter2: 'S',
     metal: MetalType.GOLD,
-    font: FONTS[0].url,
+    font: MONT_FONT_URL,
   });
 
   const exportRef = useRef<any>(null);
@@ -158,29 +143,6 @@ const DesignStudio: React.FC<DesignStudioProps> = ({
                 />
               </div>
             </div>
-          </div>
-
-          {/* Font Selection */}
-          <div className="space-y-4">
-            <label className="text-xs font-bold text-gray-400 tracking-widest uppercase flex items-center gap-2">
-              <TypeIcon className="w-3 h-3" /> {t('Typography Selection', 'Typsnittsval')}
-            </label>
-            <select
-              value={design.font}
-              onChange={(e) => setDesign(prev => ({ ...prev, font: e.target.value }))}
-              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:ring-2 focus:ring-yellow-600 outline-none"
-            >
-              <optgroup label={t('Recommended (Monospaced)', 'Rekommenderat (Monospacerat)')}>
-                {FONTS.filter(f => f.category === 'Monospaced').map(f => (
-                  <option key={f.url} value={f.url}>{f.name}</option>
-                ))}
-              </optgroup>
-              <optgroup label={t('Modern & Geometric', 'Modernt & Geometriskt')}>
-                {FONTS.filter(f => f.category !== 'Monospaced').map(f => (
-                  <option key={f.url} value={f.url}>{f.name}</option>
-                ))}
-              </optgroup>
-            </select>
           </div>
 
           {/* Metal Selection */}
