@@ -43,7 +43,6 @@ const DesignStudio: React.FC<DesignStudioProps> = ({
     font: FONTS[0].url,
   });
 
-  const [backdrop, setBackdrop] = useState<'cream' | 'dark' | 'midnight'>('cream');
   const exportRef = useRef<any>(null);
 
   const t = (en: string, sv: string) => language === 'sv' ? sv : en;
@@ -80,39 +79,10 @@ const DesignStudio: React.FC<DesignStudioProps> = ({
     }
   };
 
-  const BACKDROP_STYLES = {
-    cream: {
-      bg: 'bg-[#F5F2EF]',
-      text: 'text-gray-900',
-      subText: 'text-gray-500',
-      btn: 'bg-white/70 hover:bg-white text-gray-600 hover:text-gray-900 border border-gray-100',
-      activeBtn: 'bg-gray-900 text-white shadow-sm',
-      inactiveBtn: 'text-gray-600 hover:text-gray-900 hover:bg-white/40'
-    },
-    dark: {
-      bg: 'bg-[#15171C]',
-      text: 'text-gray-100',
-      subText: 'text-gray-400',
-      btn: 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/5',
-      activeBtn: 'bg-white text-gray-900 shadow-sm',
-      inactiveBtn: 'text-gray-300 hover:text-white hover:bg-white/10'
-    },
-    midnight: {
-      bg: 'bg-[#0B0F19]',
-      text: 'text-gray-100',
-      subText: 'text-gray-400',
-      btn: 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/5',
-      activeBtn: 'bg-white text-gray-900 shadow-sm',
-      inactiveBtn: 'text-gray-300 hover:text-white hover:bg-white/10'
-    }
-  };
-
-  const currentBackdrop = BACKDROP_STYLES[backdrop];
-
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* LEFT PANEL: 3D VIEWER */}
-      <div className={`lg:w-2/3 h-[50vh] lg:h-screen p-4 ${currentBackdrop.bg} flex items-center justify-center relative transition-colors duration-500`}>
+      <div className="lg:w-2/3 h-[50vh] lg:h-screen p-4 bg-[#F5F2EF] flex items-center justify-center relative">
         <div className="w-full h-full relative z-10">
           <Viewer3D
             {...design}
@@ -125,7 +95,7 @@ const DesignStudio: React.FC<DesignStudioProps> = ({
         {/* Navigation Back */}
         <button
           onClick={onBack}
-          className={`absolute top-4 left-4 z-20 flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all px-3 py-2 rounded-lg backdrop-blur-sm ${currentBackdrop.btn}`}
+          className="absolute top-4 left-4 z-20 flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all px-3 py-2 rounded-lg backdrop-blur-sm bg-white/70 hover:bg-white text-gray-600 hover:text-gray-900 border border-gray-100"
         >
           <ArrowLeft className="w-4 h-4" /> {t('Back', 'Tillbaka')}
         </button>
@@ -133,44 +103,16 @@ const DesignStudio: React.FC<DesignStudioProps> = ({
         {/* Download Button */}
         <button
           onClick={handleDownloadObj}
-          className={`absolute top-4 right-4 z-20 flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all px-3 py-2 rounded-lg backdrop-blur-sm ${currentBackdrop.btn}`}
+          className="absolute top-4 right-4 z-20 flex items-center gap-2 text-xs font-bold uppercase tracking-widest transition-all px-3 py-2 rounded-lg backdrop-blur-sm bg-white/70 hover:bg-white text-gray-600 hover:text-gray-900 border border-gray-100"
           title="Download 3D Model (.obj)"
         >
           <Download className="w-4 h-4" /> {t('Download 3D', 'Ladda ner 3D')}
         </button>
 
-        {/* Backdrop Switcher */}
-        <div className="absolute bottom-4 left-4 z-20 flex items-center gap-1 bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 p-1.5 rounded-full backdrop-blur-md shadow-sm transition-all border border-black/5 dark:border-white/5">
-          <button
-            onClick={() => setBackdrop('cream')}
-            className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${
-              backdrop === 'cream' ? currentBackdrop.activeBtn : currentBackdrop.inactiveBtn
-            }`}
-          >
-            {t('Cream Ambient', 'Ljus Studio')}
-          </button>
-          <button
-            onClick={() => setBackdrop('dark')}
-            className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${
-              backdrop === 'dark' ? currentBackdrop.activeBtn : currentBackdrop.inactiveBtn
-            }`}
-          >
-            {t('Charcoal Studio', 'Mörk Studio')}
-          </button>
-          <button
-            onClick={() => setBackdrop('midnight')}
-            className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 ${
-              backdrop === 'midnight' ? currentBackdrop.activeBtn : currentBackdrop.inactiveBtn
-            }`}
-          >
-            {t('Midnight Sapphire', 'Midnattsblå')}
-          </button>
-        </div>
-
         {/* Background branding */}
         <div className="absolute top-8 right-8 z-0 text-right opacity-30 pointer-events-none">
-          <h1 className={`text-3xl font-serif tracking-widest uppercase transition-colors duration-500 ${currentBackdrop.text}`}>Lumière</h1>
-          <p className={`text-[10px] tracking-[0.3em] mt-1 transition-colors duration-500 ${currentBackdrop.subText}`}>ATELIER</p>
+          <h1 className="text-3xl font-serif tracking-widest uppercase text-gray-900">Lumière</h1>
+          <p className="text-[10px] tracking-[0.3em] mt-1 text-gray-500">ATELIER</p>
         </div>
       </div>
 
@@ -248,14 +190,7 @@ const DesignStudio: React.FC<DesignStudioProps> = ({
               {Object.values(MetalType).map((m) => (
                 <button
                   key={m}
-                  onClick={() => {
-                    setDesign(prev => ({ ...prev, metal: m }));
-                    if (m === MetalType.SILVER || m === MetalType.PLATINUM) {
-                      setBackdrop('dark');
-                    } else {
-                      setBackdrop('cream');
-                    }
-                  }}
+                  onClick={() => setDesign(prev => ({ ...prev, metal: m }))}
                   className={`py-3 px-4 rounded-lg text-sm transition-all border ${
                     design.metal === m
                       ? 'border-gray-900 bg-gray-900 text-white'
