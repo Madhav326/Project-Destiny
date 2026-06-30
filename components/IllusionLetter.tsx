@@ -61,33 +61,18 @@ const getTopCenter = (geo: THREE.BufferGeometry) => {
 const getAbsMaxY = (geo: THREE.BufferGeometry) => {
   const positionAttr = geo.getAttribute('position');
   if (!positionAttr) return 5.0;
-
+  
   const array = positionAttr.array;
   let maxY = -Infinity;
-
+  
   for (let i = 1; i < array.length; i += 3) {
     const y = array[i];
     if (y > maxY) {
       maxY = y;
     }
   }
-
+  
   return maxY !== -Infinity ? maxY : 5.0;
-};
-
-// Highest Y vertex within `tolerance` of `targetX` — used to find the actual
-// top surface at the bail attachment point rather than the global letter peak.
-const getTopYAtX = (geo: THREE.BufferGeometry, targetX: number, tolerance: number): number => {
-  const positionAttr = geo.getAttribute('position');
-  if (!positionAttr) return 5.0;
-  const array = positionAttr.array;
-  let maxY = -Infinity;
-  for (let i = 0; i < array.length; i += 3) {
-    if (Math.abs(array[i] - targetX) <= tolerance) {
-      if (array[i + 1] > maxY) maxY = array[i + 1];
-    }
-  }
-  return maxY !== -Infinity ? maxY : getAbsMaxY(geo);
 };
 
 const IllusionLetter: React.FC<IllusionLetterProps> = ({ letter1, letter2, fontUrl, materialProp }) => {
@@ -235,25 +220,19 @@ const IllusionLetter: React.FC<IllusionLetterProps> = ({ letter1, letter2, fontU
   const maxY2 = useMemo(() => getAbsMaxY(geo2), [geo2]);
   const contactY = useMemo(() => Math.min(maxY1, maxY2), [maxY1, maxY2]);
   const TOP_Y = contactY - 0.15;
+  
+  const BAIL_SCALE = 0.38; 
+  const bailHeight = TARGET_HEIGHT * BAIL_SCALE;
+  const bailYOffset = (bailHeight / 2) - 0.45; 
+  const BAR_THICKNESS = 0.22; 
 
-  const BAIL_SCALE = 0.38;
-  const bailHeight = TARGET_HEIGHT * BAIL_SCALE; // scaled height of the heart bail mesh
-  const BAR_THICKNESS = 0.22;
+  const bailOffsetX = useMemo(() => {
+    return getTopCenter(geo1);
+  }, [geo1]);
 
-  const bailOffsetX = useMemo(() => getTopCenter(geo1), [geo1]);
-  const bailOffsetZ = useMemo(() => -getTopCenter(geo2), [geo2]);
-
-  // Find the actual top surface of geo1 at the bail's X position (e.g. the V-notch
-  // of an M rather than its peaks) so the bail anchors to the real surface, not
-  // the global letter peak which may be elsewhere.
-  const topYAtBailX = useMemo(() => {
-    const tolerance = (rawWidth1 || 5) * 0.25;
-    return getTopYAtX(geo1, bailOffsetX, tolerance);
-  }, [geo1, bailOffsetX, rawWidth1]);
-
-  // How far below the local top surface the bail bottom should sit (embed depth).
-  const BAIL_EMBED = 1.5;
-  const bailCenterY = topYAtBailX + (bailHeight / 2) - BAIL_EMBED;
+  const bailOffsetZ = useMemo(() => {
+    return -getTopCenter(geo2);
+  }, [geo2]);
 
   const dynamicAngle = useMemo(() => Math.atan2(rawWidth2, rawWidth1), [rawWidth1, rawWidth2]);
   const diagLength = Math.sqrt(Math.pow(rawWidth1 / 2, 2) + Math.pow(rawWidth2 / 2, 2)) * 1.6;
@@ -305,7 +284,7 @@ const IllusionLetter: React.FC<IllusionLetterProps> = ({ letter1, letter2, fontU
       </mesh>
 
       {/* Heart Bail: Rendered as an independent mesh (its own CSG tree) to prevent compilation/rendering freeze or CSG crashes */}
-      <mesh name="heartBail" position={[finalX, bailCenterY, finalZ]} scale={[BAIL_SCALE, BAIL_SCALE, BAIL_SCALE]} castShadow receiveShadow>
+      <mesh name="heartBail" position={[finalX, finalY + bailYOffset, finalZ]} scale={[BAIL_SCALE, BAIL_SCALE, BAIL_SCALE]} castShadow receiveShadow>
         <Geometry>
            <Base geometry={heartBailFront} />
            <Intersection geometry={heartBailSide} rotation={[0, Math.PI / 2, 0]} position={[0, 0, 0.002]} />
