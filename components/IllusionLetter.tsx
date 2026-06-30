@@ -20,10 +20,6 @@ interface IllusionLetterProps {
   letter2: string;
   fontUrl: string;
   materialProp: any;
-  textureIntensity: number;
-  manualOffsetX?: number;
-  manualOffsetY?: number;
-  manualOffsetZ?: number;
 }
 
 const getTopCenter = (geo: THREE.BufferGeometry) => {
@@ -79,7 +75,11 @@ const getAbsMaxY = (geo: THREE.BufferGeometry) => {
   return maxY !== -Infinity ? maxY : 5.0;
 };
 
-const IllusionLetter: React.FC<IllusionLetterProps> = ({ letter1, letter2, fontUrl, materialProp, textureIntensity, manualOffsetX = 0, manualOffsetY = 0, manualOffsetZ = 0 }) => {
+const IllusionLetter: React.FC<IllusionLetterProps> = ({ letter1, letter2, fontUrl, materialProp }) => {
+  const textureIntensity = 0.5;
+  const manualOffsetX = 0;
+  const manualOffsetY = 0;
+  const manualOffsetZ = 0;
   const isItalic = fontUrl.endsWith('#italic');
   const baseFontUrl = isItalic ? fontUrl.split('#')[0] : fontUrl;
   const font = useLoader(FontLoader, baseFontUrl);

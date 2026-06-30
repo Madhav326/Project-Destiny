@@ -10,14 +10,5 @@ export interface DesignState {
   letter2: string;
   metal: MetalType;
   font: string;
-  textureIntensity: number;
-  manualOffsetX?: number;
-  manualOffsetY?: number;
-  manualOffsetZ?: number;
 }
 
-export interface AiResponse {
-  title: string;
-  description: string;
-  priceEstimate: string;
-}

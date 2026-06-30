@@ -38,7 +38,7 @@ const MATERIALS = {
 };
 
 // SceneContent handles the actual 3D objects and the export logic
-const SceneContent = forwardRef(({ letter1, letter2, font, metal, textureIntensity, manualOffsetX, manualOffsetY, manualOffsetZ }: DesignState, ref) => {
+const SceneContent = forwardRef(({ letter1, letter2, font, metal }: DesignState, ref) => {
   const groupRef = useRef<THREE.Group>(null);
 
   useImperativeHandle(ref, () => ({
@@ -74,21 +74,17 @@ const SceneContent = forwardRef(({ letter1, letter2, font, metal, textureIntensi
 
   return (
     <group ref={groupRef}>
-      <IllusionLetter 
-        letter1={letter1} 
-        letter2={letter2} 
-        fontUrl={font} 
-        materialProp={materialProp} 
-        textureIntensity={textureIntensity}
-        manualOffsetX={manualOffsetX}
-        manualOffsetY={manualOffsetY}
-        manualOffsetZ={manualOffsetZ}
+      <IllusionLetter
+        letter1={letter1}
+        letter2={letter2}
+        fontUrl={font}
+        materialProp={materialProp}
       />
     </group>
   );
 });
 
-const Viewer3D: React.FC<Viewer3DProps> = ({ letter1, letter2, font, metal, textureIntensity, manualOffsetX, manualOffsetY, manualOffsetZ, exportRef }) => {
+const Viewer3D: React.FC<Viewer3DProps> = ({ letter1, letter2, font, metal, exportRef }) => {
   return (
     <Canvas shadows camera={{ position: [0, 0, 15], fov: 45 }}>
       <Suspense fallback={null}>
@@ -138,16 +134,12 @@ const Viewer3D: React.FC<Viewer3DProps> = ({ letter1, letter2, font, metal, text
           </group>
         </Environment>
 
-        <SceneContent 
+        <SceneContent
           ref={exportRef}
-          letter1={letter1} 
-          letter2={letter2} 
-          font={font} 
-          metal={metal} 
-          textureIntensity={textureIntensity}
-          manualOffsetX={manualOffsetX}
-          manualOffsetY={manualOffsetY}
-          manualOffsetZ={manualOffsetZ}
+          letter1={letter1}
+          letter2={letter2}
+          font={font}
+          metal={metal}
         />
         
         <OrbitControls makeDefault minPolarAngle={0} maxPolarAngle={Math.PI} />
