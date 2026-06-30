@@ -164,6 +164,12 @@ const DesignStudio: React.FC<DesignStudioProps> = ({
               ))}
             </div>
           </div>
+          <p className="text-xs text-gray-400 leading-relaxed">
+            {t(
+              'Please note: the final physical piece may vary slightly in color, texture, and finish compared to the 3D preview.',
+              'Observera: den slutgiltiga produkten kan skilja sig något i färg, textur och finish jämfört med 3D-förhandsgranskningen.'
+            )}
+          </p>
 
         </div>
 
